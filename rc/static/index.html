@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Popcorn Time Remote Control</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link type="text/css" rel="stylesheet" href="/styles/style.css" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+
+    <style>
+      .video-list {
+        width: 98%;
+        margin: 0 auto;
+      }
+      
+      .video-item {
+        margin-bottom: 30px;
+      }
+      .video-item, img {
+        width: 100%;
+      }
+      .video-item button {
+        width: 100%;
+        height: 30px;
+        margin-top: 5px;
+        border: 0;
+        color: #fff;
+        background-color: #1ba2ef;
+      }
+      .video-item button:active { background-color: #235d9f; }
+    </style>
+
+    <div class="video-list">
+      <div class="video-item" data-cod="7hE5Pk8F4Uo">
+        <img src="https://i.ytimg.com/vi/7hE5Pk8F4Uo/hqdefault.jpg" alt="">
+        <button>Ver video +</button>
+      </div>
+
+      <div class="video-item" data-cod="3XF2A9AdQ-k">
+        <img src="https://i.ytimg.com/vi_webp/3XF2A9AdQ-k/mqdefault.webp" alt="">
+        <button>Ver video +</button>
+      </div>
+
+      <div class="video-item" data-cod="OBRkuPMt8Ew">
+        <img src="https://i.ytimg.com/vi_webp/OBRkuPMt8Ew/mqdefault.webp" alt="">
+        <button>Ver video +</button>
+      </div>
+
+      <div class="video-item" data-cod="NZb0XKHgtjo">
+        <img src="https://i.ytimg.com/vi/NZb0XKHgtjo/mqdefault.jpg" alt="">
+        <button>Ver video +</button>
+      </div>
+
+    </div>
+
+
+  
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/hammer.min.js"></script>
+    <script src="/js/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<ion-view view-title="Compilador Font-end">
+	
+	<div class="list has-header">
+	  <button class="button button-small button-positive button-clear-search" ng-click="clearSearch()">X</button>
+	  <label class="item item-input">
+	    <input type="text" placeholder="Pesquisa web" ng-model="searchText">
+	  </label>
+	</div>
+
+  <ion-content>
+
+  	<script id="my-modal.html" type="text/ng-template">
+	  <ion-modal-view>
+	    <ion-header-bar>
+	      <h1 class="title">Log Processo</h1>
+	      <div class="buttons">
+		      <button class="button button-clear" ng-click="modal.hide();">Close</button>
+		    </div>
+	    </ion-header-bar>
+	    <ion-content>
+	      <ion-list>
+				<ion-item ng-repeat="out in output" class='item-text-wrap' ng-bind-html='out.data'>
+				</ion-item>
+			</ion-list>
+
+	    </ion-content>
+	  </ion-modal-view>
+	</script>
+	
+	<ion-list>
+		<div class="topo-spacer"></div>
+		<ion-item class="web-list" ng-repeat="dir in dirList | filter : searchText">
+			<h2>{{dir.name}} </h2>
+
+			<div class="web-list-controls">
+				<button class="button button-small button-positive" ng-click="listWebFiles(dir.path)">view</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'css')">Compile css</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'jquery')">Jquery</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'angular')">angular / require</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'angular-concat')">angular concat</button>
+			</div>
+			
+			<!-- 
+			<ul>
+				<li class="web-list-folder" ng-repeat="file in subList[dir.path]">{{file.name}}</li>
+			</ul>
+			-->
+
+			<tree ng-repeat="file in subList[dir.path]" file="file" main-scope="ctrll"></tree>
+		</ion-item>
+	</ion-list>
+
+  </ion-content>
+</ion-view>

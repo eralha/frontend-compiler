@@ -1,0 +1,19 @@
+<ion-view view-title="Playlists">
+  <ion-content>
+
+    <ion-list>
+      <ion-item class="item item-thumbnail-left" ng-repeat="movie in movies" href="">
+      	<img src="{{movie.medium_cover_image}}" alt="" />
+      	<h2>{{movie.title}}</h2>
+      	<p>{{movie.year}} duration: {{movie.runtime}}min</p>
+      	<button ng-repeat="torrent in movie.torrents" ng-click="watchTorrent(torrent)">{{torrent.quality}} - {{torrent.size}}</button>
+      </ion-item>
+    </ion-list>
+
+    <ion-infinite-scroll
+	    on-infinite="loadMovies()"
+	    distance="1%">
+	  </ion-infinite-scroll>
+
+  </ion-content>
+</ion-view>

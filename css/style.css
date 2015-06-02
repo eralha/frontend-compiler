@@ -1,0 +1,48 @@
+/* Empty. Add your own CSS if you like */
+body, html {
+	box-shadow: 10px 10px 5px #000;
+	background-color: transparent !important;
+}
+
+.web-list .folder { 
+	float: left;
+	clear:both; 
+}
+.web-list .folder.isDir { 
+	font-weight: bold;
+	cursor: pointer; 
+}
+.web-list button { 
+	display: none;
+}
+.web-list h2 {
+	float: left;
+	cursor: pointer;
+}
+.web-list-controls {
+	position: relative;
+	width: 300px;
+	height: 30px;
+	margin-top: -5px;
+	padding-left: 10px;
+	float: left;
+}
+.web-list-controls:hover button,
+.web-list h2:hover + .web-list-controls button { 
+	display: inline-block; 
+}
+.web-list ul { 
+	clear: both; 
+	margin-left: 20px;
+}
+.web-list-folder {}
+.topo-spacer {
+	width: 100%;
+	height: 46px;
+}
+.button-clear-search {
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	z-index: 100;
+}

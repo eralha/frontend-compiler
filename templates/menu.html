@@ -1,0 +1,72 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  
+  <script id="settings.html" type="text/ng-template">
+    <ion-modal-view>
+      <ion-header-bar>
+        <h1 class="title">Settings</h1>
+        <div class="buttons">
+          <button class="button button-clear" ng-click="hideSettings();">Close</button>
+        </div>
+      </ion-header-bar>
+      <ion-content>
+        <!-- CONTENT -->
+        <form name="settingsForm">
+          <div class="list">
+            <label class="item item-input">
+              <span class="input-label">DSV drive:</span>
+              <input type="text" ng-model="driveName" ng-blur="fieldBlur(this)" name="driveName">
+            </label>
+          </div>
+        </form>
+      </ion-content>
+    </ion-modal-view>
+  </script>
+
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Menu</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list>
+        <!-- 
+        <ion-item nav-clear menu-close ng-click="login()">
+          Login
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/search">
+          Search
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/browse">
+          Browse
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/playlists">
+          Playlists
+        </ion-item>
+        -->
+        <ion-item nav-clear menu-close href="#/app/treeview">
+          Tree View
+        </ion-item>
+        <!--
+        <ion-item nav-clear menu-close href="#/app/datamining">
+          Data Mining
+        </ion-item>
+        -->
+        <ion-item nav-clear menu-close ng-click="showSettings()">
+          Settings
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
