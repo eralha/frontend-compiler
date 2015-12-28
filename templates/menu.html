@@ -14,7 +14,11 @@
           <div class="list">
             <label class="item item-input">
               <span class="input-label">DSV drive:</span>
-              <input type="text" ng-model="driveName" ng-blur="fieldBlur(this)" name="driveName">
+              <input type="text" ng-model="dsvDrive" ng-blur="fieldBlur(this, 'dsv')" name="dsvDrive">
+            </label>
+            <label class="item item-input">
+              <span class="input-label">TST drive:</span>
+              <input type="text" ng-model="tstDrive" ng-blur="fieldBlur(this, 'tst')" name="tstDrive">
             </label>
           </div>
         </form>
@@ -55,8 +59,11 @@
           Playlists
         </ion-item>
         -->
-        <ion-item nav-clear menu-close href="#/app/treeview">
-          Tree View
+        <ion-item nav-clear menu-close href="#/app/treeview/dsv">
+          DSV Webs
+        </ion-item>
+        <ion-item nav-clear menu-close href="#/app/treeview/tst">
+          TST Webs
         </ion-item>
         <!--
         <ion-item nav-clear menu-close href="#/app/datamining">

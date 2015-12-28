@@ -9,11 +9,17 @@ angular.module('starter.controllers', [])
     $scope.settingsModal = modal;
   });
 
-  $scope.driveName = fileSrvc.getSrcPath();
+  $scope.dsvDrive = fileSrvc.getSrcPath();
+  $scope.tstDrive = fileSrvc.getTstPath();
 
-  $scope.$watch('driveName', function(newValue){
-    console.log("new drive name: "+fileSrvc.getSrcPath());
-    $scope.driveName = String($scope.driveName).replace(':\\', '');
+  $scope.$watch('dsvDrive', function(newValue){
+    console.log("new dsvDrive name: "+fileSrvc.getSrcPath());
+    $scope.dsvDrive = String($scope.dsvDrive).replace(':\\', '');
+  });
+
+  $scope.$watch('tstDrive', function(newValue){
+    console.log("new tstDrive name: "+fileSrvc.getTstPath());
+    $scope.tstDrive = String($scope.tstDrive).replace(':\\', '');
   });
   
   $scope.showSettings = function(){
@@ -22,68 +28,29 @@ angular.module('starter.controllers', [])
   $scope.hideSettings = function(){
     $scope.settingsModal.hide();
   }
-  $scope.fieldBlur = function(childScope){
-    $scope.driveName = childScope.driveName;
-    fileSrvc.setSrcPath($scope.driveName);
+  $scope.fieldBlur = function(childScope, driveToken){
+
+    if(driveToken == "dsv"){
+      $scope.dsvDrive = childScope.dsvDrive;
+      fileSrvc.setSrcPath($scope.dsvDrive);
+    }
+
+    if(driveToken == "tst"){
+      $scope.tstDrive = childScope.tstDrive;
+      fileSrvc.setTstPath($scope.tstDrive);
+    }
   }
 
-})
+  $scope.$on('$routeChangeSuccess', function(e, current, previous){
 
-.controller('DataMiningCtrl', function($scope, $ionicModal, $timeout, fileSrvc) {
+    console.log(current);
 
-  var request = require("request"),
-      cheerio = require("cheerio"),
-      url = "http://www.accuweather.com/pt/pt/lisbon/274087/weather-forecast/274087";
-      
-      request(url, function (error, response, body) {
-        if (!error) {
-          console.log(response);
-          var $ = cheerio.load(body);
-          $scope.temp = $("#feed-main .cond").text()+" "+$("#feed-main .temp").text();
-          $scope.$apply();
-          console.log($scope.temp);
-        } else {
-          console.log("We’ve encountered an error: " + error);
-        }
-      });
+  });
 
 })
 
-.controller('PlaylistsCtrl', function($scope, $http, $ionicScrollDelegate, $sce) {
+.controller('TreeView', function($scope, $stateParams, $sce, $ionicModal, fileSrvc, $ionicScrollDelegate, $stateParams) {
 
-  $scope.searching = true;
-  $scope.playing = false;
-  $scope.movies = new Array();
-  var apiURL = "https://yts.re/api/v2/list_movies.json";
-  var page = 0;
-
-  $scope.loadMovies = function(){
-    page ++;
-
-    var moviesendPoint = apiURL+'?page='+page;
-
-    $http.get(moviesendPoint).
-    success(function(data, status, headers, config) {
-      //console.log(data);
-
-      var movies = data.data.movies;
-      for(i in movies){
-        $scope.movies.push(movies[i]);
-      }
-
-      $scope.$broadcast('scroll.infiniteScrollComplete');
-    }).error(function() {
-
-    });//end http
-  }
-
-  $scope.watchTorrent = function(torrentObj){
-    window.watchTorrent(torrentObj);
-  }//end watchTorrent
-
-})
-
-.controller('TreeView', function($scope, $stateParams, $sce, $ionicModal, fileSrvc, $ionicScrollDelegate) {
 
   $ionicModal.fromTemplateUrl('my-modal.html', {
     scope: $scope,
@@ -96,6 +63,7 @@ angular.module('starter.controllers', [])
   $scope.subList = {};
   $scope.output = new Array();
   $scope.ctrll = $scope;
+  $scope.currDrive = $stateParams.drive;
 
   /*
   var grunt = require('grunt');
@@ -108,6 +76,14 @@ angular.module('starter.controllers', [])
   $scope.$watch('searchText', function(){
     $ionicScrollDelegate.resize();
   });
+
+  /*
+    $scope.$watch(function(){
+      return fileSrvc.getSrcPath();
+    }, function(newValue){
+      listWebs();
+    });
+  */
 
   function parseStdData(data){
     var out = data.toString().replace(/([\s])/g,"");
@@ -138,6 +114,11 @@ angular.module('starter.controllers', [])
     var command = fileSrvc.getSrcPath()+'grunttasks\\grunt '+type+' --web='+web;
         command = (proj)? command+' --proj='+proj : command;
 
+        console.log(command);
+
+        //If we are trying to run a command in TST we set the drive letter
+        command = (arguments[3]) ? command + ' --drive=' + $scope.tstDrive : command;
+
         $scope.output.push({data: "Running command: "+command});
 
     var spawn = require('child_process').spawn;
@@ -160,11 +141,18 @@ angular.module('starter.controllers', [])
             $scope.output.push({data: '/masterpage/main.master changed Set:'});
             $scope.output.push({data: 'script data-main="/js/main.min" src="/js/libs/require.js"'});
           }
+
+          //If we do a concat job we put a warning on the main.min file
+          if(proj == 'angular-concat'){
+            fileSrvc.putWarningOnMain(web); 
+          }
+
           $scope.output.push({data: "Done!"});
           $scope.modal.show();
           $ionicScrollDelegate.scrollBottom();
           //Change src path to dist path in js files
         });
+
   }//end runGruntCommand
 
   $scope.listWebFiles = function(_dirPath){
@@ -183,7 +171,7 @@ angular.module('starter.controllers', [])
   }
 
   function listWebs(){
-    $scope.dirList = fileSrvc.listWebs();
+    $scope.dirList = fileSrvc.listWebs($scope.currDrive);
   }//end listWebs
 
   //list inital folders

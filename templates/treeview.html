@@ -32,12 +32,17 @@
 		<ion-item class="web-list" ng-repeat="dir in dirList | filter : searchText">
 			<h2>{{dir.name}} </h2>
 
-			<div class="web-list-controls">
+			<div class="web-list-controls" ng-if="currDrive == 'dsv'">
 				<button class="button button-small button-positive" ng-click="listWebFiles(dir.path)">view</button>
 				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'css')">Compile css</button>
 				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'jquery')">Jquery</button>
 				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'angular')">angular / require</button>
-				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'angular-concat')">angular concat</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'js', 'angular-concat')">Concat</button>
+			</div>
+
+			<div class="web-list-controls" ng-if="currDrive == 'tst'">
+				<button class="button button-small button-positive" ng-click="listWebFiles(dir.path)">view</button>
+				<button class="button button-small button-positive" ng-click="runGruntCommand(dir.name, 'html', 'html-min', 'tst')">html minify</button>
 			</div>
 			
 			<!-- 

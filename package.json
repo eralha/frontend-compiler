@@ -4,17 +4,22 @@
   "version": "0.2.0",
   "window": {
     "toolbar": false,
+    "frame": true,
     "icon": "img/ionic.png",
     "show": false,
     "position": "center",
     "width": 679,
-    "height": 500
+    "height": 500,
+    "fullscreen": false
   },
   "dependencies": {
     "express": "git+https://github.com/gpt-modules/express.git",
     "network-address": "git+https://github.com/gpt-modules/network-address.git",
     "socket.io": "git+https://github.com/gpt-modules/socket.io.git",
-    "cheerio" : "git+https://github.com/cheeriojs/cheerio",
-    "request" : "git+https://github.com/request/request"
+    "cheerio": "git+https://github.com/cheeriojs/cheerio",
+    "request": "git+https://github.com/request/request"
+  },
+  "devDependencies": {
+    "nw-builder": "^2.2.0"
   }
 }

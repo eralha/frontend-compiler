@@ -27,14 +27,23 @@
   <body ng-app="starter">
 
     <script id="folder-list.html" type="text/ng-template">
-      <div class='folder' ng-class='{isDir: file.isdir == true}' ng-click='readFolder(file)'>{{file.name}}</div>
-      <div class="web-list-controls" ng-if='file.isdir == true'>
+      <div class='folder' ng-class='{isDir: file.isdir == true}' ng-click='readFolder(file)'>{{file.name}} {{currDrive}}</div>
+
+      <div class="web-list-controls" ng-if="file.isdir == true && mainScope.currDrive == 'dsv'">
         <button class="button button-small button-positive" ng-click="readFolder(file)">view</button>
         <button class="button button-small button-positive" ng-click="runGruntCommand(file.path, 'css')">Compile css</button>
         <button class="button button-small button-positive" ng-click="runGruntCommand(file.path, 'js', 'jquery')">Jquery</button>
         <button class="button button-small button-positive" ng-click="runGruntCommand(file.path, 'js', 'angular')">angular / require</button>
         <button class="button button-small button-positive" ng-click="runGruntCommand(file.path, 'js', 'angular-concat')">angular concat</button>
       </div>
+
+      <div class="web-list-controls" ng-if="file.isdir == true && mainScope.currDrive == 'tst'">
+        <button class="button button-small button-positive" ng-click="readFolder(file)">view</button>
+        <button class="button button-small button-positive" ng-click="runGruntCommand(file.path, 'html', 'html-min', 'tst')">html minify</button>
+      </div>
+
+
+
       <ul>
         <li class="web-list-folder" ng-repeat="file in subList[file.path]">
           <tree file="file" main-scope="mainScope"></tree>

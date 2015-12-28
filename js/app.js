@@ -23,133 +23,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'RecursionH
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
-
-  var path = require('path');
-  var fs = require('fs');
-  var os = require('os');
-  var tempFolder = path.join(os.tmpDir(), 'Popcorn-Time');
-
-  if( ! fs.existsSync(tempFolder) ) { fs.mkdir(tempFolder); }
-
-
-  window.watchTorrent = function(torrentObj){
-
-    console.log(torrentObj);
-
-    var MIN_PERCENTAGE_LOADED = 0.5;
-    var MIN_SIZE_LOADED = 10 * 1024 * 1024;
-      
-    var torrent = torrentObj.url;
-    var tmpFilename = ( torrent.toLowerCase().split('/').pop().split('.torrent').shift() ).slice(0,100);
-        tmpFilename = tmpFilename.replace(/([^a-zA-Z0-9-_])/g, '_') + '.mp4';
-
-    var numConnections = 100;
-
-    var tmpFile = path.join(tempFolder, tmpFilename);
-    var popcornflix = require('peerflix');
-
-    var magnetURL = "magnet:?xt=urn:btih:";
-        magnetURL = magnetURL.concat(torrentObj.hash);
-        magnetURL = magnetURL.concat("&dn="+torrentObj.url);
-        magnetURL = magnetURL.concat("&tr=udp://open.demonii.com:1337");
-        magnetURL = magnetURL.concat("&tr=udp://tracker.istole.it:80");
-        magnetURL = magnetURL.concat("&tr=http://tracker.yify-torrents.com/announce");
-        magnetURL = magnetURL.concat("&tr=udp://tracker.publicbt.com:80");
-        magnetURL = magnetURL.concat("&tr=udp://tracker.openbittorrent.com:80");
-        magnetURL = magnetURL.concat("&tr=udp://tracker.coppersurfer.tk:6969");
-        magnetURL = magnetURL.concat("&tr=udp://exodus.desync.com:6969");
-        magnetURL = magnetURL.concat("&tr=http://exodus.desync.com:6969/announce");
-
-    /*
-    torrent = torrent.replace("https", "http");
-    var http = require('http');
-        http.get(torrent).on('response', function (response) {
-        var body = '';
-        var i = 0;
-        response.on('data', function (chunk) {
-                i++;
-                body += chunk;
-                console.log('BODY Part: ' + i);
-            });
-            response.on('end', function () {
-                console.log('Finished');
-                startStream(tmpFile, body);
-        });
-    });
-    */
-
-    //console.log(magnetURL);
-    //console.log(torrent);
-    console.log(tmpFile);
-
-    function progressCallback(percent, now, total){
-      console.log('percent:'+percent+' now:'+now+'  total:'+total);
-    }
-
-    function torrentCallback(err, flix){
-      console.log("CALLBACK");
-      console.log(err);
-      console.log(flix);
-
-        if (err) throw err;
-        var started = Date.now(),
-          loadedTimeout;
-
-          flix.server.on('listening', function () {
-            var href = 'http://127.0.0.1:' + flix.server.address().port + '/';
-
-            loadedTimeout ? clearTimeout(loadedTimeout) : null;
-
-            var checkLoadingProgress = function () {
-
-              var now = flix.downloaded,
-                total = flix.selected.length,
-              // There's a minimum size before we start playing the video.
-              // Some movies need quite a few frames to play properly, or else the user gets another (shittier) loading screen on the video player.
-                targetLoadedSize = MIN_SIZE_LOADED > total ? total : MIN_SIZE_LOADED,
-                targetLoadedPercent = MIN_PERCENTAGE_LOADED * total / 100.0,
-
-                targetLoaded = Math.max(targetLoadedPercent, targetLoadedSize),
-
-                percent = now / targetLoaded * 100.0;
-
-              if (now > targetLoaded) {
-                
-                window.location = '#/app/player/';
-                console.log('loaded');
-                console.log('#/app/player/'+href);
-
-                /*
-                if (typeof window.spawnVideoPlayer === 'function') {
-                  window.spawnVideoPlayer(href, subs, movieModel);
-                }
-                */
-                if (typeof callback === 'function') {
-                  callback(href, subs, movieModel);
-                }
-              } else {
-                typeof progressCallback == 'function' ? progressCallback( percent, now, total) : null;
-                loadedTimeout = setTimeout(checkLoadingProgress, 500);
-              }
-            };
-            checkLoadingProgress();
-
-          });//flix.server
-    }//torrentCallback
-
-    var videoStreamer = popcornflix(torrent, {
-        // Set the custom temp file
-        path: tmpFile,
-        //port: 554,
-        buffer: (1.5 * 1024 * 1024).toString(),
-        connections: numConnections
-      }, torrentCallback);
-
-        
-  }//end watchTorrent
-
-
-
   $stateProvider
 
   .state('app', {
@@ -159,80 +32,24 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'RecursionH
     controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: "/search",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/search.html"
-      }
-    }
-  })
-
-  .state('app.browse', {
-    url: "/browse",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/browse.html"
-      }
-    }
-  })
-    .state('app.playlists', {
-      url: "/playlists",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/playlists.html",
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
-
-    .state('app.playvideo', {
-      url: "/player/:videoCod",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/player.html",
-          controller: 'PlayerCtrl'
-        }
-      }
-    })
-
     .state('app.treeview', {
-      url: "/treeview",
+      url: "/treeview/:drive",
       views: {
         'menuContent': {
           templateUrl: "templates/treeview.html",
           controller: 'TreeView'
         }
       }
-    })
-
-    .state('app.dataMining', {
-      url: "/datamining",
-      views: {
-        'menuContent': {
-          templateUrl: "templates/data_mining.html",
-          controller: 'DataMiningCtrl'
-        }
-      }
-    })
-
-  .state('app.single', {
-    url: "/playlists/:playlistId",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/playlist.html",
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
+    });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/treeview');
+  $urlRouterProvider.otherwise('/app/treeview/dsv');
 });
 
 app.factory('fileSrvc', ['$q', function($q){
 
     var folderCache = {};
     var srcpath = 'Z:\\';
+    var tstpath = 'X:\\';
     var fs = require('fs'),
         os = require('os'),
         path = require('path');
@@ -256,14 +73,16 @@ app.factory('fileSrvc', ['$q', function($q){
       return folderCache[_path];
     }
 
-    this.listWebs = function(){
+    this.listWebs = function(server){
       var dirList = new Array();
 
-      fs.readdirSync(srcpath).filter(function(file) {
-        var dirPath = path.join(srcpath, file);
+      var _driveToRead = (server == 'tst')? tstpath : srcpath;
+
+      fs.readdirSync(_driveToRead).filter(function(file) {
+        var dirPath = path.join(_driveToRead, file);
         var isdir = fs.statSync(dirPath).isDirectory();
 
-        (isdir == true && dirPath.indexOf("dsv") !== -1)? dirList.push({name:file, path: dirPath}) : null;
+        (isdir == true && dirPath.indexOf("dsv") !== -1 || dirPath.indexOf("tst") !== -1)? dirList.push({name:file, path: dirPath}) : null;
 
         return isdir;
       });
@@ -275,8 +94,16 @@ app.factory('fileSrvc', ['$q', function($q){
       srcpath = src+":\\";
     }
 
+    this.setTstPath = function(src){
+      tstpath = src+":\\";
+    }
+
     this.getSrcPath = function(){
       return srcpath;
+    }
+
+    this.getTstPath = function(){
+      return tstpath;
     }
 
     this.changeSrcToDist = function(path){
@@ -319,6 +146,27 @@ app.factory('fileSrvc', ['$q', function($q){
       return output;
     }
 
+    this.putWarningOnMain = function(path){
+      var output = "";
+
+      fs.readFile(srcpath+path+'/js/dist/main.min.js', 'utf8', function (err,data) {
+        if (err) {
+          return console.log(err);
+        }
+
+        data = data.concat("console.log('%c Atenção, Javascript compilado, alterar na masterpage o main path data-main=\"/js/dist/main.min\" para data-main=\"/js/main\"', 'background: #f00; color: #fff');");
+
+
+        fs.writeFile(srcpath+path+'/js/dist/main.min.js', data, function(err) {
+            if(err) {
+                return console.log(err);
+            }
+        }); 
+      });
+
+      return output;
+    }
+
     return this;
 
 }]);
@@ -333,7 +181,7 @@ app.factory('compilerSrvc', ['$q', function($q){
 
 }]);
 
-app.directive("tree", function(RecursionHelper, fileSrvc, compilerSrvc) {
+app.directive("tree", function(RecursionHelper, fileSrvc, compilerSrvc, $ionicScrollDelegate) {
     return {
         restrict: "E",
         scope: {
@@ -342,6 +190,7 @@ app.directive("tree", function(RecursionHelper, fileSrvc, compilerSrvc) {
         },
         templateUrl: 'folder-list.html',
         compile: function(element) {
+          
             return RecursionHelper.compile(element, function(scope, iElement, iAttrs, controller, transcludeFn){
                 scope.subList = {};
 
