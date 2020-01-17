@@ -7,7 +7,7 @@ module.exports = function(grunt) {
     }
   */
 
-  var path = "z:/"+grunt.option( "web" )+"/";
+  var path = "T:/"+grunt.option( "web" )+"/";
   //var path = "c:/git/grunt/";
   //CSS CONFIG
   var outPutCss = path+"css/style.css";

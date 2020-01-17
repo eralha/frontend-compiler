@@ -48,7 +48,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'RecursionH
 app.factory('fileSrvc', ['$q', function($q){
 
     var folderCache = {};
-    var srcpath = 'Z:\\';
+    var srcpath = 'T:\\';
     var tstpath = 'X:\\';
     var fs = require('fs'),
         os = require('os'),

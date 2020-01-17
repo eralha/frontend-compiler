@@ -20,6 +20,6 @@
     "request": "git+https://github.com/request/request"
   },
   "devDependencies": {
-    "nw-builder": "^2.2.0"
+    "nw-builder": "^2.2.0" //VERSAO 0.12.0 DO NW.js
   }
 }
